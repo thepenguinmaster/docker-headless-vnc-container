@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
+
 ### every exit != 0 fails the script
 set -e
 

@@ -97,16 +97,18 @@ vncserver -kill $DISPLAY &> $STARTUPDIR/vnc_startup.log \
 
 echo -e "start vncserver with param: VNC_COL_DEPTH=$VNC_COL_DEPTH, VNC_RESOLUTION=$VNC_RESOLUTION\n..."
 
-vnc_cmd="vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION PasswordFile=$HOME/.vnc/passwd"
+vnc_cmd="vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION PasswordFile=$HOME/.vnc/passwd" 
 if [[ ${VNC_PASSWORDLESS:-} == "true" ]]; then
-  vnc_cmd="${vnc_cmd} -SecurityTypes None --I-KNOW-THIS-IS-INSECURE"
+  vnc_cmd="${vnc_cmd} -SecurityTypes VncAuth"
 fi
 
 if [[ $DEBUG == true ]]; then echo "$vnc_cmd"; fi
 $vnc_cmd > $STARTUPDIR/no_vnc_startup.log 2>&1
 
-echo -e "start window manager\n..."
-$HOME/wm_startup.sh &> $STARTUPDIR/wm_startup.log
+# echo -e "start window manager\n..."
+# $HOME/wm_startup.sh &> $STARTUPDIR/wm_startup.log
+
+
 
 ## log connect options
 echo -e "\n\n------------------ VNC environment started ------------------"
@@ -120,6 +122,11 @@ if [[ $DEBUG == true ]] || [[ $1 =~ -t|--tail-log ]]; then
     tail -f $STARTUPDIR/*.log $HOME/.vnc/*$DISPLAY.log
 fi
 
+echo -e "\n\n------------------ Start Chrome ------------------"
+echo -e "\nStarting Chrome: $HOME_PAGE\n"
+
+while true; do bash chromium $HOME_PAGE; sleep 1; done &
+
 if [ -z "$1" ] || [[ $1 =~ -w|--wait ]]; then
     wait $PID_SUB
 else
@@ -128,3 +135,4 @@ else
     echo "Executing command: '$@'"
     exec "$@"
 fi
+
