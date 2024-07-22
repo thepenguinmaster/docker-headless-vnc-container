@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 ### updates the `REFRESHED_AT` env to the current day
 
 searchdir="$(dirname $0)"

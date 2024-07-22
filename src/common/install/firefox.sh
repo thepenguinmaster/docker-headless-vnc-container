@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 set -e
 
 VERSION="102.3.0esr"
